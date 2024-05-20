@@ -18,13 +18,13 @@ public class Main {
         Dataset<Row> vahobiddin = session.read()
                 .option("header", "true")
                 .option("inferSchema", "true")
-                .csv("/home/welltron/Downloads/data/part-00003-533b6aa9-2b29-4da8-8554-715668de302b-c000.csv");
+                .csv("/home/welltron/Downloads/data/part-00001-533b6aa9-2b29-4da8-8554-715668de302b-c000.csv");
 
         // Extracting date from datetime column
-        vahobiddin = vahobiddin.withColumn("extracted_date", functions.date_format(vahobiddin.col("date_time"), "yyyy-MM-dd"));
+        vahobiddin = vahobiddin.withColumn("config_date", functions.date_format(vahobiddin.col("date_time"), "yyyy-MM-dd"));
 
         // Elasticsearch index for storing data
-        String indexName = "vahobiddin/data";
+        String indexName = "datasource/data";
 
         // Indexing DataFrame in Elasticsearch
         vahobiddin.write()
@@ -36,6 +36,7 @@ public class Main {
         // Terminating Spark session
         session.stop();
 
-        System.out.println("Process completed. Check Elasticsearch at http://localhost:9200/vahobiddin and http://localhost:9200/vahobiddin/_search?pretty for details.");
+        System.out.println("Process completed. Check Elasticsearch at http://localhost:9200/datasource" +
+                " and http://localhost:9200/datasource/_search?pretty for details.");
     }
 }
